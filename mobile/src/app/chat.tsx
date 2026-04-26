@@ -10,6 +10,8 @@ import {
   SafeAreaView,
   Text,
   ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { useChat } from "../hooks/useChat";
 import { MessageBubble } from "../components/MessageBubble";
@@ -20,6 +22,7 @@ export default function ChatScreen() {
   const { messages, loading, error, sendMessage, clearMessages } = useChat();
   const [apiConnected, setApiConnected] = React.useState(false);
   const [checkingConnection, setCheckingConnection] = React.useState(true);
+  const flatListRef = React.useRef<FlatList>(null);
 
   // Check API connection on mount
   useEffect(() => {
@@ -31,6 +34,15 @@ export default function ChatScreen() {
 
     checkConnection();
   }, []);
+
+  // Auto-scroll to bottom when messages change
+  useEffect(() => {
+    if (messages.length > 0) {
+      setTimeout(() => {
+        flatListRef.current?.scrollToEnd({ animated: true });
+      }, 100);
+    }
+  }, [messages]);
 
   if (checkingConnection) {
     return (
@@ -59,31 +71,45 @@ export default function ChatScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Chat AI</Text>
+        <View style={styles.headerContent}>
+          <View style={styles.headerIconBg}>
+            <Text style={styles.headerIcon}>🤖</Text>
+          </View>
+          <View>
+            <Text style={styles.headerTitle}>Chat AI</Text>
+            <Text style={styles.headerSubtitle}>Powered by LLM</Text>
+          </View>
+        </View>
       </View>
 
-      <FlatList
-        data={messages}
-        renderItem={({ item }) => (
-          <MessageBubble text={item.text} sender={item.sender} />
-        )}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.messageList}
-        inverted={false}
-        ListEmptyComponent={
-          <View style={styles.emptyState}>
-            <Text style={styles.emptyStateText}>Start a conversation!</Text>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.keyboardAvoidingView}
+      >
+        <FlatList
+          ref={flatListRef}
+          data={messages}
+          renderItem={({ item }) => (
+            <MessageBubble text={item.text} sender={item.sender} />
+          )}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.messageList}
+          inverted={false}
+          ListEmptyComponent={
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyStateText}>Start a conversation!</Text>
+            </View>
+          }
+        />
+
+        {error && (
+          <View style={styles.errorBanner}>
+            <Text style={styles.errorBannerText}>{error}</Text>
           </View>
-        }
-      />
+        )}
 
-      {error && (
-        <View style={styles.errorBanner}>
-          <Text style={styles.errorBannerText}>{error}</Text>
-        </View>
-      )}
-
-      <ChatInput onSendMessage={sendMessage} loading={loading} />
+        <ChatInput onSendMessage={sendMessage} loading={loading} />
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -93,16 +119,47 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFF",
   },
+  keyboardAvoidingView: {
+    flex: 1,
+  },
   header: {
-    paddingVertical: 12,
+    paddingVertical: 14,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
     borderBottomColor: "#E5E5EA",
+    backgroundColor: "#F8F9FA",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  headerContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  headerIconBg: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: "#007AFF",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  headerIcon: {
+    fontSize: 24,
   },
   headerTitle: {
-    fontSize: 20,
-    fontWeight: "600",
+    fontSize: 18,
+    fontWeight: "700",
     color: "#000",
+  },
+  headerSubtitle: {
+    fontSize: 12,
+    color: "#666",
+    marginTop: 2,
+    fontWeight: "500",
   },
   messageList: {
     flexGrow: 1,
