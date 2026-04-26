@@ -1,0 +1,3 @@
+interface GenerateResponse {
+  response: string;
+}
