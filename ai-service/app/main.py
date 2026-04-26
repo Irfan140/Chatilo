@@ -1,4 +1,7 @@
-"""FastAPI application entry point."""
+# Initialize LangSmith FIRST before importing LangChain
+from app.core.config import init_langsmith
+init_langsmith()
+
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 

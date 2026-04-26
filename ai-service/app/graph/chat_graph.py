@@ -1,6 +1,7 @@
 from typing import TypedDict
 from langgraph.graph import StateGraph, START, END
 from app.llm.models import get_model
+from app.llm.prompts import get_chat_prompt
 
 
 class ChatState(TypedDict):
@@ -10,7 +11,11 @@ class ChatState(TypedDict):
 
 def process_chat(state: ChatState) -> ChatState:
     model = get_model()
-    response = model.invoke(state["input"])
+    prompt = get_chat_prompt()
+    
+    # Create chain: prompt -> model
+    chain = prompt | model
+    response = chain.invoke({"input": state["input"]})
     
     # Extract string content from response
     state["output"] = response.content if hasattr(response, "content") else str(response)
