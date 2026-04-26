@@ -5,11 +5,6 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-interface MessageBubbleProps {
-  text: string;
-  sender: "user" | "bot";
-}
-
 export function MessageBubble({ text, sender }: MessageBubbleProps) {
   const isUser = sender === "user";
 
@@ -21,17 +16,9 @@ export function MessageBubble({ text, sender }: MessageBubbleProps) {
       ]}
     >
       <View
-        style={[
-          styles.bubble,
-          isUser ? styles.userBubble : styles.botBubble,
-        ]}
+        style={[styles.bubble, isUser ? styles.userBubble : styles.botBubble]}
       >
-        <Text
-          style={[
-            styles.text,
-            isUser ? styles.userText : styles.botText,
-          ]}
-        >
+        <Text style={[styles.text, isUser ? styles.userText : styles.botText]}>
           {text}
         </Text>
       </View>

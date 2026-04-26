@@ -5,13 +5,6 @@
 import { useState, useCallback } from "react";
 import * as api from "../lib/api";
 
-export interface Message {
-  id: string;
-  text: string;
-  sender: "user" | "bot";
-  timestamp: number;
-}
-
 export function useChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
@@ -49,8 +42,7 @@ export function useChat() {
       };
       setMessages((prev) => [...prev, botMsg]);
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Unknown error";
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(errorMessage);
     } finally {
       setLoading(false);

@@ -7,7 +7,6 @@ import {
   View,
   FlatList,
   StyleSheet,
-  SafeAreaView,
   Text,
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -17,6 +16,7 @@ import { useChat } from "../hooks/useChat";
 import { MessageBubble } from "../components/MessageBubble";
 import { ChatInput } from "../components/ChatInput";
 import * as api from "../lib/api";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ChatScreen() {
   const { messages, loading, error, sendMessage, clearMessages } = useChat();
@@ -123,42 +123,45 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    paddingVertical: 14,
+    paddingVertical: 18,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#E5E5EA",
-    backgroundColor: "#F8F9FA",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 3,
-    elevation: 3,
+    borderBottomColor: "#E0E0E0",
+    backgroundColor: "#007AFF",
+    shadowColor: "#007AFF",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 8,
   },
   headerContent: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 12,
+    gap: 14,
   },
   headerIconBg: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: "#007AFF",
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: "rgba(255, 255, 255, 0.25)",
     justifyContent: "center",
     alignItems: "center",
+    borderWidth: 2,
+    borderColor: "rgba(255, 255, 255, 0.4)",
   },
   headerIcon: {
-    fontSize: 24,
+    fontSize: 26,
   },
   headerTitle: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: "#000",
+    fontSize: 20,
+    fontWeight: "800",
+    color: "#FFF",
+    letterSpacing: 0.5,
   },
   headerSubtitle: {
     fontSize: 12,
-    color: "#666",
-    marginTop: 2,
+    color: "rgba(255, 255, 255, 0.8)",
+    marginTop: 4,
     fontWeight: "500",
   },
   messageList: {

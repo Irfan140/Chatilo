@@ -12,11 +12,6 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-interface ChatInputProps {
-  onSendMessage: (message: string) => Promise<void>;
-  loading: boolean;
-}
-
 export function ChatInput({ onSendMessage, loading }: ChatInputProps) {
   const [message, setMessage] = useState("");
   const [isFocused, setIsFocused] = useState(false);
@@ -31,10 +26,7 @@ export function ChatInput({ onSendMessage, loading }: ChatInputProps) {
   return (
     <View style={styles.container}>
       <TextInput
-        style={[
-          styles.input,
-          isFocused && styles.inputFocused,
-        ]}
+        style={[styles.input, isFocused && styles.inputFocused]}
         placeholder="Type a message..."
         placeholderTextColor="#999"
         value={message}
