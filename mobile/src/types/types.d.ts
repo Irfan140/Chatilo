@@ -14,3 +14,11 @@ interface Message {
   sender: "user" | "bot";
   timestamp: number;
 }
+
+interface ChatResponse {
+  reply: string;
+}
+
+interface ApiError {
+  error: string;
+}

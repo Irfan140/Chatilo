@@ -5,14 +5,6 @@
 
 const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || "http://localhost:3000";
 
-interface ChatResponse {
-  reply: string;
-}
-
-interface ApiError {
-  error: string;
-}
-
 /**
  * Send message to chat API
  */
@@ -35,7 +27,7 @@ export async function sendMessage(message: string): Promise<string> {
     return data.reply;
   } catch (error) {
     throw new Error(
-      `Failed to send message: ${error instanceof Error ? error.message : "Unknown error"}`
+      `Failed to send message: ${error instanceof Error ? error.message : "Unknown error"}`,
     );
   }
 }
