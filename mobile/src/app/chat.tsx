@@ -61,7 +61,7 @@ export default function ChatScreen() {
         <View style={styles.centerContent}>
           <Text style={styles.errorTitle}>Connection Error</Text>
           <Text style={styles.errorText}>
-            Cannot connect to chat API. Please ensure the backend is running on http://localhost:3000
+            Cannot connect to chat API. Please ensure the backend is running on {process.env.EXPO_PUBLIC_API_UR!}
           </Text>
         </View>
       </SafeAreaView>
